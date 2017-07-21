@@ -17,6 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('cars', 'CarsController@index');
-Route::get('cars/{id}', 'CarsController@show')->where('id', '[0-9]+');
-Route::resource('admin/cars', 'AdminController', ['except' => ['create', 'edit']]);
+Route::get('cars', 'Api\CarsController@index');
+Route::get('cars/{id}', 'Api\CarsController@show')->where('id', '[0-9]+');
+Route::resource('admin/cars', 'Api\AdminController', ['except' => ['create', 'edit']]);

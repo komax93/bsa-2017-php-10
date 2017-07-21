@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Manager\UserManager;
+use App\Request\SaveCarRequest;
 use Illuminate\Http\Request;
 use App\Manager\CarManager;
 use App\Entity\Car;
@@ -14,12 +17,20 @@ class AdminController extends Controller
     protected $carManager;
 
     /**
-     * AdminController constructor.
-     * @param CarManager $carManager
+     * @var UserManager
      */
-    public function __construct(CarManager $carManager)
+    protected $userManager;
+
+    /**
+     * AdminController constructor.
+     *
+     * @param CarManager $carManager
+     * @param UserManager $userManager
+     */
+    public function __construct(CarManager $carManager, UserManager $userManager)
     {
         $this->carManager = $carManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -36,6 +47,7 @@ class AdminController extends Controller
             $cars->map(function (Car $car) {
                 return [
                     'id' => $car->id,
+                    'color' => $car->color,
                     'model' => $car->model,
                     'registration_number' => $car->registration_number,
                     'year' => $car->year,
@@ -51,14 +63,15 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $carRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $carRequest)
     {
-        $result = $request->all();
+        $user = $this->userManager->findById(1);
+        $carRequest = new SaveCarRequest($carRequest->toArray(), $user);
 
-        return $this->carManager->saveCar($result);
+        return $this->carManager->saveCar($carRequest);
     }
 
     /**
@@ -77,6 +90,7 @@ class AdminController extends Controller
 
         return response()->json([
             'id' => $car->id,
+            'color' => $car->color,
             'model' => $car->model,
             'registration_number' => $car->registration_number,
             'year' => $car->year,
@@ -95,9 +109,12 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $result = $request->all();
+        $user = $this->userManager->findById(1);
+        $car = $this->carManager->findById($id);
 
-        return $this->carManager->saveCar($result);
+        $carRequest = new SaveCarRequest($request->toArray(), $user, $car);
+
+        return $this->carManager->saveCar($carRequest);
     }
 
     /**

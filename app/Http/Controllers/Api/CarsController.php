@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Manager\CarManager;
 use App\Entity\Car;
 
@@ -36,6 +37,7 @@ class CarsController extends Controller
             $cars->map(function (Car $car) {
                 return [
                     'id' => $car->id,
+                    'color' => $car->color,
                     'model' => $car->model,
                     'registration_number' => $car->registration_number,
                     'year' => $car->year,
@@ -64,6 +66,7 @@ class CarsController extends Controller
 
         return response()->json([
             'id' => $car->id,
+            'color' => $car->color,
             'model' => $car->model,
             'registration_number' => $car->registration_number,
             'year' => $car->year,
