@@ -126,5 +126,7 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $this->carManager->deleteCar($id);
+
+        return redirect()->route('cars.index');
     }
 }
