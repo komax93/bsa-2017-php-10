@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', 'IndexController');
+Route::get('/', 'IndexController')->name('home');
 
 Route::resource('cars', 'CarsController');
+
+Auth::routes();
+
+
+Route::get('/home', 'HomeController@index');

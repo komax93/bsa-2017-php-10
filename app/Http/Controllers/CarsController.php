@@ -34,6 +34,8 @@ class CarsController extends Controller
      */
     public function __construct(CarManager $carManager, UserManager $userManager)
     {
+        $this->middleware('auth');
+
         $this->carManager = $carManager;
         $this->userManager = $userManager;
     }
