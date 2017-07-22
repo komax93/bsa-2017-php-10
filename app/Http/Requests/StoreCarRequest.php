@@ -31,6 +31,7 @@ class StoreCarRequest extends FormRequest
             "model" => "required|max:255",
             "registration_number" => "required|alpha_num|size:6",
             "year" => "required|integer|between:1000," . date('Y'),
+            "mileage" => "required|numeric",
             "color" => "required|max:255|alpha",
             "price" => "required|numeric"
         ];

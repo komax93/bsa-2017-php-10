@@ -29,6 +29,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="mileage" class="col-sm-2 control-label">Mileage</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="mileage" name="mileage" value="{{ old('mileage') }}">
+            </div>
+        </div>
+        <div class="form-group">
             <label for="color" class="col-sm-2 control-label">Color</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="color" name="color" value="{{ old('color') }}">
