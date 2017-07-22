@@ -58,6 +58,9 @@
                                     Forgot Your Password?
                                 </a>
                             </div>
+                            <div class="col-md-7 col-md-offset-5">
+                                <a href="{{ route('github.login') }}" class="btn">Login via Github</a>
+                            </div>
                         </div>
                     </form>
                 </div>

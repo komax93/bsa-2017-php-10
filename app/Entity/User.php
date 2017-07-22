@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableInterface;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements AuthenticatableInterface
 {
+    use Notifiable;
+
     public $timestamps = false;
 
     /**
