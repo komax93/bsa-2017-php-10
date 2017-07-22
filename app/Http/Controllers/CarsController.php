@@ -66,7 +66,8 @@ class CarsController extends Controller
      */
     public function create()
     {
-        return view('cars.create');
+        $users = $this->userManager->findAll();
+        return view('cars.create')->withUsers($users);
     }
 
     /**
@@ -77,7 +78,7 @@ class CarsController extends Controller
      */
     public function store(StoreCarRequest $carRequest)
     {
-        $user = $this->userManager->findById(1);
+        $user = $this->userManager->findById($carRequest->user_id);
         $carRequest = new SaveCarRequest($carRequest->toArray(), $user);
         $this->carManager->saveCar($carRequest);
 
@@ -121,6 +122,7 @@ class CarsController extends Controller
     public function edit($id)
     {
         $car = $this->carManager->findById($id);
+        $users = $this->userManager->findAll();
 
         if(is_null($car)) {
             abort(404);
@@ -137,7 +139,9 @@ class CarsController extends Controller
             'user_id' => $car->user_id
         ];
 
-        return view('cars.edit')->withCar($carArray);
+        return view('cars.edit')
+            ->withCar($carArray)
+            ->withUsers($users);
     }
 
     /**
@@ -149,7 +153,7 @@ class CarsController extends Controller
      */
     public function update(StoreCarRequest $request, $id)
     {
-        $user = $this->userManager->findById(1);
+        $user = $this->userManager->findById($request->user_id);
         $car = $this->carManager->findById($id);
 
         $carRequest = new SaveCarRequest($request->toArray(), $user, $car);
