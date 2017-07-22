@@ -68,8 +68,8 @@ class RegisterController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'is_active' => ($data['is_active'] === 'on') ? true : false,
-            'is_admin' => ($data['is_admin'] === 'on') ? true : false
+            'is_active' => isset($data['is_active']) ? true : false,
+            'is_admin' => isset($data['is_admin']) ? true : false
         ]);
     }
 }
