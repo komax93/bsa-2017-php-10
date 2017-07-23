@@ -1,99 +1,79 @@
-# Домашнее задание
-## Подготовка
-1. Склонировать репозиторий с тестами: https://github.com/BinaryStudioAcademy/bsa-2017-php-10
-2. Взять результат выполнения предыдущей домашней работы (Models).
-3. Подключить REST API из соответствующего домашнего задания
-    1. Привести набор полей в соответствие с ДЗ models.
-    2. Использовать manager из ДЗ Models.
-    3. Расположить контроллеры в подпапке Api.
-4. Подключить страницы из домашнего задания по Views and Forms.
-    - Для форм создания и редактирования машины нужно будет добавить select с пользователями.
-5. Создать по роуту “/” главную страницу, содержащую текст: Best Car Hire Deals.
+# Hometask # 10
 
-## Задание 1
-Добавить возможность регистрации новых пользователей и аутентификации с помощью email и password.
-    
-1. Сгенерировать командой основные файлы
-2. Расширить класс App\Entity\User
-3. Адаптировать стандартные форму и контроллер под набор полей
-4. После аутентификации показывать пользователю страницу со списком 	машин.
-5. Закрыть доступ ко всем страницам кроме главной для пользователей, не прошедших аутентификацию.
+## Project installation
 
-## Задание 2
-Добавить возможность аутентификации через социальную сеть или сервис, например, Фейсбук (Socialite, SocialiteProviders, etc.)
-Для этого нужно будет зарегистрировать приложение на используемом ресурсе и использовать предоставленные ключи внутри Laravel приложения.
+Данный проект написан на базе фреймворка Laravel 5.4.*.
 
-## Задание 3
-Реализовать механизм авторизации с помощью ролей. 
-- Ролей должно быть 2: обычный пользователь и администратор. 
-- Для хранения роли нужно создать миграцию для таблицы [users]: добавить флаг is_admin.
-- Права доступа:
-    1. Для страниц приложения:
-        - Пользователь должен иметь доступ к страницам списка машин и отдельной машины.
-        - Пользователь не должен видеть контролы для редактирования, удаления и добавления машины.
-        - Пользователь не должен иметь доступа к соответствующим роутам.
-        - Администратор должен видеть контролы для редактирования, удаления и добавления машины и иметь доступ к соответствующим роутам.
-        - В случае попытки неавторизованного доступа - перенаправлять на главную (/).
-    1. Для API: 
-        - Роуты /api/cars должны быть доступны для всех аутентифицированых пользователей.
-        - Действия роутов  /api/admin/cars/ должны быть доступны только для администратора. 
-        - В случае попытки неавторизованного доступа - возвращать response с кодом 403.
-- Контроль прав доступа нужно было реализовать в классах Policy так, чтобы каждому классу модели соответствовала своя Policy.
-- Реализованные полиси должны описывать доступ к действиям пользователя (например, post.create), а не наличие роли администратора. Проверка критерия предоставления доступа (в нашем случае - роли) должна происходить в методах класса полиси. То есть в контроллерах в итоге должна быть проверка типа
+Для успешной установки на сервер, нужно выполнить следующие действия:
 
-    ```
-    if (Gate::denies(‘create', $post)) ...
-    ```
-    
-    вместо
-    
-    ```
-    if (Gate::denies(‘isAdmin', $post)) …
-    ```
+1. <strong>Склонировать проект;</strong>
+2. <strong>Выполнить команду composer install в корне проекта;</strong>
+3. <strong>Заполняем все данные в .env.example, после чего копируем этот файл в корень проекта с названием .env (заполняем только необходимые поля, в том числе и поля для аутентификации через Github).</strong>
+4. <strong>Выполнить php artisan key:generate в корне проекта;</strong>
+5. <strong>Задать права в корне проекта:</strong> sudo chgrp -R www-data storage bootstrap/cache | sudo chmod -R ug+rwx storage bootstrap/cache
 
-## Дополнительно
-Если все успеете, в README проекта вместо задания добавьте полную инструкцию по развертыванию проекта и запуску тестов.
+## Поля, обязательные для заполнения
+```
+1. Нужно зарегистрировать почтовый клиент, например mailtrap, для восстановления пароля
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
 
-## Запуск тестов
+2. Поля для аутентификации через Github.com
+GITHUB_CLIENT_ID=
+GITHUB_SECRET=
+GITHUB_REDIRECT=
+
+3. Поле с адрессом сайта (нужно для прохождения тестов)
+APP_URL=http://cars.dev
+```
+
+## Пример Nginx Config:
+
+```
+server {
+        listen 80;
+        server_name cars.dev;
+
+        root /home/folder/develop/cars/public;
+        index index.html index.htm index.php;
+
+        charset utf-8;
+
+        client_max_body_size 100m;
+
+        gzip on;
+        gzip_disable "msie6";
+        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;
+
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+                fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
+
+                fastcgi_intercept_errors off;
+                fastcgi_buffer_size 16k;
+                fastcgi_buffers 4 16k;
+                fastcgi_connect_timeout 75;
+                fastcgi_send_timeout 300;
+                fastcgi_read_timeout 300;
+    }
+
+        location ~ /\.ht {
+                deny all;
+        }
+}
+```
+# Запуск тестов
 1. Создайте APP_URL в .env
-2. Запустите тесты
-
-    ```
-    php artisan dusk
-    ```
-    
-- см. https://laravel.com/docs/5.4/dusk
-### Запуск тестов c Homestead
-1. Зайдите на виртуальную машину через ssh из папки, где установлен Homestead
-    ```
-    vagrant ssh
-    ```
-2. Запустите следующие команды перед запуском тестов
-    ```
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    
-    sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-    
-    sudo apt-get update && sudo apt-get install -y google-chrome-stable
-    
-    sudo apt-get install -y xvfb
-    ```
-
-3. В отдельном окне терминала: 
-    ```
-    Xvfb :0 -screen 0 1280x960x24 &
-    ```
-
-4. Теперь можно запустить тесты.
-    ```
-    php artisan dusk
-    ```
-
-- см. https://github.com/laravel/dusk/issues/50#issuecomment-275155974
-
-## Система оценивания
-Все тесты должны проходить. Тесты менять нельзя.
-Каждое из заданий оценивается в 3 балла.
-
-Примеры из лекции доступны здесь: https://github.com/Antarus66/Auth-samples
-
+2. php artisan dusk
+3. см. https://laravel.com/docs/5.4/dusk
