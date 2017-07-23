@@ -84,6 +84,10 @@ class CarsController extends Controller
      */
     public function store(StoreCarRequest $carRequest)
     {
+        if(Gate::denies('store', $this->carManager->getCarModel())) {
+            return redirect('/');
+        }
+
         $user = $this->userManager->findById($carRequest->user_id);
         $carRequest = new SaveCarRequest($carRequest->toArray(), $user);
         $this->carManager->saveCar($carRequest);
@@ -163,6 +167,10 @@ class CarsController extends Controller
      */
     public function update(StoreCarRequest $request, $id)
     {
+        if(Gate::denies('update', $this->carManager->getCarModel())) {
+            return redirect('/');
+        }
+
         $user = $this->userManager->findById($request->user_id);
         $car = $this->carManager->findById($id);
 
