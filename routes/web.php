@@ -17,7 +17,5 @@ Route::resource('cars', 'CarsController');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-
 Route::get('login/github', 'Auth\GithubLoginController@redirectToProvider')->name('github.login');
 Route::get('login/github/callback', 'Auth\GithubLoginController@handleProviderCallback');

@@ -6,8 +6,8 @@ use App\Http\Requests\StoreCarRequest;
 use App\Manager\CarManager;
 use App\Manager\UserManager;
 use App\Entity\Car;
-use Illuminate\Http\Request;
 use App\Request\SaveCarRequest;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class CarsController
@@ -68,6 +68,10 @@ class CarsController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('create', $this->carManager->getCarModel())) {
+            return redirect('/');
+        }
+
         $users = $this->userManager->findAll();
         return view('cars.create')->withUsers($users);
     }
@@ -123,6 +127,10 @@ class CarsController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('edit', $this->carManager->getCarModel())) {
+            return redirect('/');
+        }
+
         $car = $this->carManager->findById($id);
         $users = $this->userManager->findAll();
 
@@ -172,6 +180,10 @@ class CarsController extends Controller
      */
     public function destroy($id)
     {
+        if(Gate::denies('delete', $this->carManager->getCarModel())) {
+            return redirect('/');
+        }
+
         $this->carManager->deleteCar($id);
 
         return redirect()->route('cars.index');

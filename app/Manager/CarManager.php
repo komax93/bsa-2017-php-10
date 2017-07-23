@@ -74,4 +74,14 @@ class CarManager implements CarManagerContract
         $car = Car::findOrFail($carId);
         $car->delete();
     }
+
+    /**
+     * This method return Car model
+     *
+     * @return Car
+     */
+    public function getCarModel()
+    {
+        return new Car();
+    }
 }

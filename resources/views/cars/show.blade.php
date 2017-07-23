@@ -43,16 +43,21 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-6">
-                        <a href="{{ route('cars.edit', $car['id']) }}" class="btn btn-primary btn-block edit-button">Edit</a>
-                    </div>
-                    <div class="col-md-6">
-                        <form method="post" action="{{ route('cars.destroy', $car['id']) }}">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger btn-block delete-button">Delete</button>
-                        </form>
-                    </div>
+                    @can('edit', App\Entity\Car::class)
+                        <div class="col-md-6">
+                            <a href="{{ route('cars.edit', $car['id']) }}" class="btn btn-primary btn-block edit-button">Edit</a>
+                        </div>
+                    @endcan
+
+                    @can('create', App\Entity\Car::class)
+                        <div class="col-md-6">
+                            <form method="post" action="{{ route('cars.destroy', $car['id']) }}">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-danger btn-block delete-button">Delete</button>
+                            </form>
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>

@@ -29,6 +29,8 @@ class AdminController extends Controller
      */
     public function __construct(CarManager $carManager, UserManager $userManager)
     {
+        $this->middleware('auth:api');
+
         $this->carManager = $carManager;
         $this->userManager = $userManager;
     }
@@ -40,6 +42,10 @@ class AdminController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('view', $this->carManager->getCarModel())) {
+            return response()->json(['error' => 'Forbidden client'], 403);
+        }
+
         $cars = $this->carManager->findAll();
 
         return response()->json(
@@ -68,6 +74,10 @@ class AdminController extends Controller
      */
     public function store(Request $carRequest)
     {
+        if(Gate::denies('store', $this->carManager->getCarModel())) {
+            return response()->json(['error' => 'Forbidden client'], 403);
+        }
+
         $user = $this->userManager->findById(1);
         $carRequest = new SaveCarRequest($carRequest->toArray(), $user);
 
@@ -82,6 +92,10 @@ class AdminController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('show', $this->carManager->getCarModel())) {
+            return response()->json(['error' => 'Forbidden client'], 403);
+        }
+
         $car = $this->carManager->findById($id);
 
         if(is_null($car)) {
@@ -109,6 +123,10 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Gate::denies('update', $this->carManager->getCarModel())) {
+            return response()->json(['error' => 'Forbidden client'], 403);
+        }
+
         $user = $this->userManager->findById(1);
         $car = $this->carManager->findById($id);
 
@@ -125,6 +143,10 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
+        if(Gate::denies('delete', $this->carManager->getCarModel())) {
+            return response()->json(['error' => 'Forbidden client'], 403);
+        }
+
         $this->carManager->deleteCar($id);
 
         return redirect()->route('cars.index');

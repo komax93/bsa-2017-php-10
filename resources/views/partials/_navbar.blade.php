@@ -22,7 +22,9 @@
                 <ul class="nav navbar-nav">
                     @if(Auth::check())
                         <li class="{{ Request::is('cars') ? "active" : ""}}"><a href="{{ route('cars.index') }}">Cars list</a></li>
-                        <li class="{{ Request::is('cars/create') ? "active" : ""}}"><a href="{{ route('cars.create') }}">Add</a></li>
+                        @can('create', App\Entity\Car::class)
+                            <li class="{{ Request::is('cars/create') ? "active" : ""}}"><a href="{{ route('cars.create') }}">Add</a></li>
+                        @endcan
                     @endif
                 </ul>
 
