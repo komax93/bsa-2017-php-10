@@ -81,6 +81,9 @@ server {
         }
 }
 ```
+# Миграции
+1. Запуск миграции осуществляется коммандой php artisan migrate
+
 # Запуск тестов
 1. Создайте APP_URL в .env
 2. php artisan dusk
