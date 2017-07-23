@@ -14,7 +14,15 @@
 
 ## Поля, обязательные для заполнения
 ```
-1. Нужно зарегистрировать почтовый клиент, например mailtrap, для восстановления пароля
+1. Заполняем поля для работы с БД Mysql
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+
+2. Регистрируем почтовый клиент, например mailtrap, для восстановления пароля
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.mailtrap.io
 MAIL_PORT=2525
@@ -22,12 +30,12 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 
-2. Поля для аутентификации через Github.com
+3. Поля для аутентификации через Github.com
 GITHUB_CLIENT_ID=
 GITHUB_SECRET=
 GITHUB_REDIRECT=
 
-3. Поле с адрессом сайта (нужно для прохождения тестов)
+4. Поле с адрессом сайта (нужно для прохождения тестов)
 APP_URL=http://cars.dev
 ```
 
